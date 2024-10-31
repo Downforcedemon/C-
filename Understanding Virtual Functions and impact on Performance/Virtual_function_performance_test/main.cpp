@@ -1,12 +1,19 @@
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <chrono>
 #include "VirtualAnimal.h"
 #include "NonVirtualAnimal.h"
 
-
 int main() {
     const int numAnimals = 1000000;
+
+    // Open a file to write the results
+    std::ofstream outFile("results.txt");
+    if (!outFile) {
+        std::cerr << "Error opening file for writing.\n";
+        return 1;
+    }
 
     // Vector of base class pointers for virtual animals
     std::vector<VirtualAnimal*> virtualAnimals;
@@ -21,6 +28,7 @@ int main() {
     }
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> virtualDuration = end - start;
+    outFile << "Virtual function call time: " << virtualDuration.count() << " seconds\n";
     std::cout << "Virtual function call time: " << virtualDuration.count() << " seconds\n";
 
     // Vector of non-virtual animals
@@ -33,12 +41,16 @@ int main() {
     }
     end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> nonVirtualDuration = end - start;
+    outFile << "Non-virtual function call time: " << nonVirtualDuration.count() << " seconds\n";
     std::cout << "Non-virtual function call time: " << nonVirtualDuration.count() << " seconds\n";
 
     // Cleanup virtual animals
     for (auto animal : virtualAnimals) {
         delete animal;
     }
+
+    // Close the file
+    outFile.close();
 
     return 0;
 }
