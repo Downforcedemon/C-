@@ -1,0 +1,2 @@
+Virtual function call time: 54.5956 seconds
+Non-virtual function call time: 29.3234 seconds
